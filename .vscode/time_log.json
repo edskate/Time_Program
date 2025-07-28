@@ -98,6 +98,14 @@
           "email": "edskateicevida@gmail.com"
         },
         "timeSpent": 20
+      },
+      {
+        "date": "2025-07-28T16:26:44.460Z",
+        "user": {
+          "name": "Edy_97_2024",
+          "email": "edskateicevida@gmail.com"
+        },
+        "timeSpent": 50
       }
     ],
     "index02.htmç": [
@@ -152,6 +160,16 @@
           "email": "edskateicevida@gmail.com"
         },
         "timeSpent": 82
+      }
+    ],
+    "index02.html": [
+      {
+        "date": "2025-07-28T16:27:51.742Z",
+        "user": {
+          "name": "Edy_97_2024",
+          "email": "edskateicevida@gmail.com"
+        },
+        "timeSpent": 3
       }
     ]
   }

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Tabela de Programação - Agosto 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .relogio {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #e0e0e0;
+    }
+    td.checked.folga {
+      background: #ffcccc;
+    }
+    td.checked.pocket {
+      background: #ccffcc;
+    }
+    td.checked.ensaio {
+      background: #cce5ff;
+    }
+    .historico {
+      margin-top: 30px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    .atividade {
+      margin-bottom: 5px;
+    }
+    button {
+      margin: 20px auto;
+      display: block;
+      padding: 10px 20px;
+      background: #ff5555;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tabela de Programação - Agosto 2025</h1>
+  <div class="relogio">Hora atual: <span id="hora-atual"></span></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Renan - Folga</th>
+        <th>Renan - Pocket</th>
+        <th>Renan - Ensaio</th>
+        <th>Fabrício - Folga</th>
+        <th>Fabrício - Pocket</th>
+        <th>Fabrício - Ensaio</th>
+        <th>João - Folga</th>
+        <th>João - Pocket</th>
+        <th>João - Ensaio</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-corpo"></tbody>
+  </table>
+
+  <button onclick="limparHistorico()">Limpar Histórico</button>
+
+  <div class="historico">
+    <h3>Histórico de Programações</h3>
+    <div id="historico-lista"></div>
+  </div>
+
+  <script>
+    const tabela = document.getElementById("tabela-corpo");
+    const historicoLista = document.getElementById("historico-lista");
+    const dancarinos = ["renan", "fabricio", "joao"];
+    const tipos = ["folga", "pocket", "ensaio"];
+    const nomesExibicao = {
+      renan: "Renan",
+      fabricio: "Fabrício",
+      joao: "João",
+      folga: "Folga",
+      pocket: "Pocket Show",
+      ensaio: "Ensaio"
+    };
+    const diasSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+    for (let dia = 1; dia <= 31; dia++) {
+      const tr = document.createElement("tr");
+      const tdDia = document.createElement("td");
+      const data = new Date(2025, 7, dia);
+      const semana = diasSemana[data.getDay()];
+      tdDia.textContent = `${dia}/08/2025 (${semana})`;
+      tr.appendChild(tdDia);
+
+      dancarinos.forEach(nome => {
+        tipos.forEach(tipo => {
+          const td = document.createElement("td");
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = `set-${nome}-${tipo}-ago-${dia}`;
+          checkbox.className = tipo;
+
+          const estadoSalvo = localStorage.getItem(checkbox.id);
+          const registroSalvo = localStorage.getItem(`hora-${checkbox.id}`);
+
+          if (estadoSalvo === "true") {
+            checkbox.checked = true;
+            td.classList.add("checked", tipo);
+            adicionarAoHistorico(nome, tipo, dia, semana, registroSalvo);
+          }
+
+          checkbox.addEventListener("change", function () {
+            if (this.checked) {
+              const horaAgora = obterHoraAtual();
+              localStorage.setItem(checkbox.id, "true");
+              localStorage.setItem(`hora-${checkbox.id}`, horaAgora);
+              td.className = `checked ${tipo}`;
+              adicionarAoHistorico(nome, tipo, dia, semana, horaAgora);
+            } else {
+              localStorage.removeItem(checkbox.id);
+              localStorage.removeItem(`hora-${checkbox.id}`);
+              td.className = '';
+              removerDoHistorico(nome, tipo, dia);
+            }
+          });
+
+          td.appendChild(checkbox);
+          tr.appendChild(td);
+        });
+      });
+
+      tabela.appendChild(tr);
+    }
+
+    function obterHoraAtual() {
+      const agora = new Date();
+      const horas = agora.getHours().toString().padStart(2, '0');
+      const minutos = agora.getMinutes().toString().padStart(2, '0');
+      const segundos = agora.getSeconds().toString().padStart(2, '0');
+      return `${horas}:${minutos}:${segundos}`;
+    }
+
+    function adicionarAoHistorico(nome, tipo, dia, semana, hora) {
+      const id = `h-set-${nome}-${tipo}-ago-${dia}`;
+      if (!document.getElementById(id)) {
+        const div = document.createElement("div");
+        div.className = "atividade";
+        div.id = id;
+        div.textContent = `${nomesExibicao[nome]} - ${nomesExibicao[tipo]} em ${dia}/08/2025 (${semana}) às ${hora}`;
+        historicoLista.appendChild(div);
+      }
+    }
+
+    function removerDoHistorico(nome, tipo, dia) {
+      const id = `h-set-${nome}-${tipo}-ago-${dia}`;
+      const elem = document.getElementById(id);
+      if (elem) elem.remove();
+    }
+
+    function limparHistorico() {
+      if (confirm("Deseja limpar todas as marcações e o histórico de agosto?")) {
+        Object.keys(localStorage).forEach(key => {
+          if (key.includes("-ago-")) {
+            localStorage.removeItem(key);
+          }
+        });
+        location.reload();
+      }
+    }
+
+    function atualizarRelogio() {
+      const agora = new Date();
+      const horas = agora.getHours().toString().padStart(2, '0');
+      const minutos = agora.getMinutes().toString().padStart(2, '0');
+      const segundos = agora.getSeconds().toString().padStart(2, '0');
+      document.getElementById("hora-atual").textContent = `${horas}:${minutos}:${segundos}`;
+    }
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
+  </script>
+</body>
+</html>

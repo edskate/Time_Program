@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Tabela de Programação - Agosto 2025</title>
+  <title>Tabela de Programação - Setembro 2025</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -65,7 +65,7 @@
   </style>
 </head>
 <body>
-  <h1>Tabela de Programação - Agosto 2025</h1>
+  <h1>Tabela de Programação - Setembro 2025</h1>
   <div class="relogio">Hora atual: <span id="hora-atual"></span></div>
 
   <table>
@@ -108,12 +108,12 @@
     };
     const diasSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
-    for (let dia = 1; dia <= 31; dia++) {
+    for (let dia = 1; dia <= 30; dia++) {
       const tr = document.createElement("tr");
       const tdDia = document.createElement("td");
-      const data = new Date(2025, 7, dia);
+      const data = new Date(2025, 8, dia);
       const semana = diasSemana[data.getDay()];
-      tdDia.textContent = `${dia}/08/2025 (${semana})`;
+      tdDia.textContent = `${dia}/09/2025 (${semana})`;
       tr.appendChild(tdDia);
 
       dancarinos.forEach(nome => {
@@ -121,7 +121,7 @@
           const td = document.createElement("td");
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
-          checkbox.id = `set-${nome}-${tipo}-ago-${dia}`;
+          checkbox.id = `set-${nome}-${tipo}-set-${dia}`;
           checkbox.className = tipo;
 
           const estadoSalvo = localStorage.getItem(checkbox.id);
@@ -165,26 +165,26 @@
     }
 
     function adicionarAoHistorico(nome, tipo, dia, semana, hora) {
-      const id = `h-set-${nome}-${tipo}-ago-${dia}`;
+      const id = `h-set-${nome}-${tipo}-set-${dia}`;
       if (!document.getElementById(id)) {
         const div = document.createElement("div");
         div.className = "atividade";
         div.id = id;
-        div.textContent = `${nomesExibicao[nome]} - ${nomesExibicao[tipo]} em ${dia}/08/2025 (${semana}) às ${hora}`;
+        div.textContent = `${nomesExibicao[nome]} - ${nomesExibicao[tipo]} em ${dia}/09/2025 (${semana}) às ${hora}`;
         historicoLista.appendChild(div);
       }
     }
 
     function removerDoHistorico(nome, tipo, dia) {
-      const id = `h-set-${nome}-${tipo}-ago-${dia}`;
+      const id = `h-set-${nome}-${tipo}-set-${dia}`;
       const elem = document.getElementById(id);
       if (elem) elem.remove();
     }
 
     function limparHistorico() {
-      if (confirm("Deseja limpar todas as marcações e o histórico de agosto?")) {
+      if (confirm("Deseja limpar todas as marcações e o histórico de setembro?")) {
         Object.keys(localStorage).forEach(key => {
-          if (key.includes("-ago-")) {
+          if (key.includes("-set-")) {
             localStorage.removeItem(key);
           }
         });
@@ -203,6 +203,6 @@
     atualizarRelogio();
   </script>
   <hr>
-  <a href="index01.html">Ir para Setembro 2025</a>
+  <a href="index02.html">Ir para Outubro 2025</a>
 </body>
 </html>
